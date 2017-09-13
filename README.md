@@ -1,22 +1,10 @@
 ## Boost.Beast is a cross-platform header-only library for asynchronous HTTP.
 
-[Conan.io](https://conan.io) package for [Boost.Process](https://github.com/Boostorg/Beast) project
+[Conan.io](https://conan.io) package for [Boost.Beast](https://github.com/Boostorg/Beast) project
 
-The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/conan-public/Boost.Process%3Abincrafters).
+The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/conan-public/Boost.Beast%3Abincrafters).
 
-## Build packages
-
-Download conan client from [Conan.io](https://conan.io) and run:
-
-    $ python build.py
-
-If your are in Windows you should run it from a VisualStudio console in order to get "mc.exe" in path.
-
-## Upload packages to server
-
-    $ conan upload Boost.Beast/1.65.0@bincrafters/stable --all
-
-## Reuse the packages
+## For Users: Use this package
 
 ### Basic setup
 
@@ -34,9 +22,30 @@ If you handle multiple dependencies in your project is better to add a *conanfil
 
 Complete the installation of requirements for your project running:</small></span>
 
-    conan install .
+    $ mkdir build && cd build && conan install ..
+	
+Note: It is recommended that you run conan install from a build directory and not the root of the project directory.  This is because conan generates *conanbuildinfo* files specific to a single build configuration which by default comes from an autodetected default profile located in ~/.conan/profiles/default .  If you pass different build configuration options to conan install, it will generate different *conanbuildinfo* files.  Thus, they shoudl not be added to the root of the project, nor committed to git. 
 
-Project setup installs the library (and all his dependencies) and generates the files *conanbuildinfo.txt* with all the paths and variables that you need to link with your dependencies.
+## For Packagers: Publish this Package
+
+The example below shows the commands used to publish to bincrafters conan repository. To publish to your own conan respository (for example, after forking this git repository), you will need to change the commands below accordingly. 
+
+## Build  
+
+This is a header only library, so nothing needs to be built.
+
+## Package 
+
+    $ conan create bincrafters/testing
+	
+## Add Remote and Associate package with it
+
+	$ conan remote add bincrafters "https://api.bintray.com/conan/bincrafters/public-conan"
+	$ conan remote add_ref Boost.Beast/1.65.0@bincrafters/testing bincrafters
+
+## Upload
+
+    $ conan upload Boost.Beast/1.65.0@bincrafters/testing --all
 
 ### License
 [Boost](LICENSE)
