@@ -3,13 +3,13 @@ from conans import ConanFile, tools, os
 
 class BoostBeastConan(ConanFile):
     name = "Boost.Beast"
-    version = "1.66.0"
+    version = "20171013"
     url = "https://github.com/bincrafters/conan-boost-beast"
     description = "Boost.beast provides HTTP and WebSocket built on Boost.Asio in C++11"
     license = "www.boost.org/users/license.html"
     lib_short_names = ["beast"]
-    requires =  "Boost.Asio/1.64.0@bincrafters/testing", \
-        "Boost.Intrusive/1.64.0@bincrafters/testing"
+    requires =  "Boost.Asio/1.65.1@bincrafters/stable", \
+        "Boost.Intrusive/1.65.1@bincrafters/stable"
     
     def source(self):
         source_url = "https://github.com/boostorg/beast"
