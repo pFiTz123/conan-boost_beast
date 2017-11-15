@@ -1,4 +1,8 @@
-from conans import ConanFile, tools, os
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from conans import ConanFile, tools
+import os
 
 
 class BoostBeastConan(ConanFile):
@@ -8,15 +12,26 @@ class BoostBeastConan(ConanFile):
     url = "https://github.com/bincrafters/conan-boost-beast"
     description = "Boost.beast provides HTTP and WebSocket built on Boost.Asio in C++11"
     license = "www.boost.org/users/license.html"
+    short_paths = True
     lib_short_names = ["beast"]
     requires =  "Boost.Asio/1.65.1@bincrafters/stable", \
         "Boost.Intrusive/1.65.1@bincrafters/stable"
     
     def source(self):
-        source_url = "https://github.com/boostorg/beast"
-        self.run("git clone --depth=1 --branch=master {0}.git".format(source_url))
-        with tools.chdir("./beast"):
-            self.run("git checkout {0}".format(self.commit_id))
+        source_url = "https://github.com/boostorg"
+        for lib_short_name in self.lib_short_names:
+            self.run("git clone --branch=master {0}/{1}.git".format(source_url, lib_short_name))
+            with tools.chdir(lib_short_name):
+                self.run("git checkout {0}".format(self.commit_id))
+            
+    # TODO: Switch to this method after 1.66.0 release
+    # def source(self):
+        # boostorg_github = "https://github.com/boostorg"
+        # archive_name = "boost-" + self.version  
+        # for lib_short_name in self.lib_short_names:
+            # tools.get("{0}/{1}/archive/{2}.tar.gz"
+                # .format(boostorg_github, lib_short_name, archive_name))
+            # os.rename(lib_short_name + "-" + archive_name, lib_short_name)
             
     def package(self):
         for lib_short_name in self.lib_short_names:
