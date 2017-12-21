@@ -12,14 +12,14 @@ At this time, this library is not released by the author under Boost. It is curr
 
 ### Basic setup
 
-    $ conan install Boost.Beast/20171013@bincrafters/stable
+    $ conan install Boost.Beast/1.66.0@bincrafters/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    Boost.Beast/20171013@bincrafters/stable
+    Boost.Beast/1.66.0@bincrafters/stable
 
     [generators]
     txt
@@ -48,7 +48,7 @@ This is a header only library, so nothing needs to be built.
 
 ## Upload
 
-    $ conan upload Boost.Beast/20171013@bincrafters/stable --all -r bincrafters
+    $ conan upload Boost.Beast/1.66.0@bincrafters/stable --all -r bincrafters
 
 ### License
 [Boost](www.boost.org/LICENSE_1_0.txt)

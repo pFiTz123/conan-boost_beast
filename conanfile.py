@@ -1,42 +1,69 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-from conans import ConanFile, tools
-import os
+from conans import ConanFile
 
 
 class BoostBeastConan(ConanFile):
     name = "Boost.Beast"
-    version = "20171013"
-    commit_id = "f09b2d3e1c9d383e5d0f57b1bf889568cf27c39f"
-    url = "https://github.com/bincrafters/conan-boost-beast"
-    description = "Boost.beast provides HTTP and WebSocket built on Boost.Asio in C++11"
-    license = "www.boost.org/users/license.html"
-    short_paths = True
+    version = "1.66.0"
+
+    requires = \
+        "Boost.Asio/1.66.0@bincrafters/testing", \
+        "Boost.Assert/1.66.0@bincrafters/testing", \
+        "Boost.Config/1.66.0@bincrafters/testing", \
+        "Boost.Container/1.66.0@bincrafters/testing", \
+        "Boost.Core/1.66.0@bincrafters/testing", \
+        "Boost.Endian/1.66.0@bincrafters/testing", \
+        "Boost.Intrusive/1.66.0@bincrafters/testing", \
+        "Boost.Optional/1.66.0@bincrafters/testing", \
+        "Boost.Smart_Ptr/1.66.0@bincrafters/testing", \
+        "Boost.Static_Assert/1.66.0@bincrafters/testing", \
+        "Boost.System/1.66.0@bincrafters/testing", \
+        "Boost.Throw_Exception/1.66.0@bincrafters/testing", \
+        "Boost.Type_Traits/1.66.0@bincrafters/testing", \
+        "Boost.Utility/1.66.0@bincrafters/testing", \
+        "Boost.Winapi/1.66.0@bincrafters/testing"
+
     lib_short_names = ["beast"]
-    requires =  "Boost.Asio/1.65.1@bincrafters/stable", \
-        "Boost.Intrusive/1.65.1@bincrafters/stable"
-    
-    def source(self):
-        source_url = "https://github.com/boostorg"
-        for lib_short_name in self.lib_short_names:
-            self.run("git clone --branch=master {0}/{1}.git".format(source_url, lib_short_name))
-            with tools.chdir(lib_short_name):
-                self.run("git checkout {0}".format(self.commit_id))
-            
-    # TODO: Switch to this method after 1.66.0 release
-    # def source(self):
-        # boostorg_github = "https://github.com/boostorg"
-        # archive_name = "boost-" + self.version  
-        # for lib_short_name in self.lib_short_names:
-            # tools.get("{0}/{1}/archive/{2}.tar.gz"
-                # .format(boostorg_github, lib_short_name, archive_name))
-            # os.rename(lib_short_name + "-" + archive_name, lib_short_name)
-            
-    def package(self):
-        for lib_short_name in self.lib_short_names:
-            include_dir = os.path.join(lib_short_name, "include")
-            self.copy(pattern="*", dst="include", src=include_dir)		
+    is_header_only = True
+
+    # BEGIN
+
+    url = "https://github.com/bincrafters/conan-boost-beast"
+    description = "Please visit http://www.boost.org/doc/libs/1_66_0"
+    license = "www.boost.org/users/license.html"
+    build_requires = "Boost.Generator/1.66.0@bincrafters/testing"
+    short_paths = True
+    exports = "boostgenerator.py"
 
     def package_id(self):
         self.info.header_only()
+        getattr(self, "package_id_after", lambda:None)()
+    def source(self):
+        self.call_patch("source")
+    def build(self):
+        self.call_patch("build")
+    def package(self):
+        self.call_patch("package")
+    def package_info(self):
+        self.call_patch("package_info")
+    def call_patch(self, method, *args):
+        if not hasattr(self, '__boost_conan_file__'):
+            try:
+                from conans import tools
+                with tools.pythonpath(self):
+                    import boostgenerator  # pylint: disable=F0401
+                    boostgenerator.BoostConanFile(self)
+            except Exception as e:
+                self.output.error("Failed to import boostgenerator for: "+str(self)+" @ "+method.upper())
+                raise e
+        return getattr(self, method, lambda:None)(*args)
+    @property
+    def env(self):
+        import os.path
+        result = super(self.__class__, self).env
+        result['PYTHONPATH'] = [os.path.dirname(__file__)] + result.get('PYTHONPATH',[])
+        return result
+    @property
+    def build_policy_missing(self):
+        return (getattr(self, 'is_in_cycle_group', False) and not getattr(self, 'is_header_only', True)) or super(self.__class__, self).build_policy_missing
+
+    # END
