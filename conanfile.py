@@ -8,7 +8,8 @@ class BoostBeastConan(ConanFile):
     name = "boost_beast"
     version = "1.66.0"
     url = "https://github.com/bincrafters/conan-boost_beast"
-
+    author = "Bincrafters <bincrafters@gmail.com>"
+    exports = ["LICENSE.md"]
     lib_short_names = ["beast"]
     is_header_only = True
 
