@@ -11,24 +11,8 @@ find_package(MPI)
 file(GLOB SOURCE_FILES *.cpp)
 
 add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${CMAKE_PROJECT_NAME} 
-  CONAN_PKG::boost_asio
-  CONAN_PKG::boost_assert
-  CONAN_PKG::boost_beast
-  CONAN_PKG::boost_bind
-  CONAN_PKG::boost_config
-  CONAN_PKG::boost_container
-  CONAN_PKG::boost_core
-  CONAN_PKG::boost_endian
-  CONAN_PKG::boost_intrusive
-  CONAN_PKG::boost_optional
-  CONAN_PKG::boost_smart_ptr
-  CONAN_PKG::boost_static_assert
-  CONAN_PKG::boost_system
-  CONAN_PKG::boost_throw_exception
-  CONAN_PKG::boost_type_traits
-  CONAN_PKG::boost_utility
-  CONAN_PKG::boost_winapi)
+target_link_libraries(${CMAKE_PROJECT_NAME}
+  CONAN_PKG::boost_beast)
 set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 if(MPI_CXX_FOUND)
