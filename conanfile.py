@@ -4,7 +4,7 @@
 from conans import python_requires
 
 
-base = python_requires("boost_base/1.67.0@bincrafters/testing")
+base = python_requires("boost_base/1.68.0@bincrafters/testing")
 
 class BoostBeastConan(base.BoostBaseConan):
     name = "boost_beast"
@@ -12,6 +12,7 @@ class BoostBeastConan(base.BoostBaseConan):
     lib_short_names = ["beast"]
     header_only_libs = ["beast"]
     b2_requires = [
+        "boost_align",
         "boost_asio",
         "boost_assert",
         "boost_bind",
@@ -29,5 +30,3 @@ class BoostBeastConan(base.BoostBaseConan):
         "boost_utility",
         "boost_winapi"
     ]
-
-
