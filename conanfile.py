@@ -4,11 +4,11 @@
 from conans import python_requires
 
 
-base = python_requires("boost_base/1.67.0@bincrafters/testing")
+base = python_requires("boost_base/1.70.0@fizzled/stable")
 
 class BoostBeastConan(base.BoostBaseConan):
     name = "boost_beast"
-    version = "1.67.0"
+    version = "1.70.0"
     url = "https://github.com/bincrafters/conan-boost_beast"
     lib_short_names = ["beast"]
     header_only_libs = ["beast"]
